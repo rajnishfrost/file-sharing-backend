@@ -79,6 +79,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join-room', (roomId) => {
+    // Validate room code - only uppercase letters and numbers allowed
+    if (!/^[A-Z0-9]+$/.test(roomId)) {
+      socket.emit('room-error', { message: 'Invalid room code. Only uppercase letters and numbers allowed.' });
+      return;
+    }
+    
     const room = rooms.get(roomId);
     
     if (!room) {
